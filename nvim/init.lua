@@ -112,7 +112,17 @@ cmp.setup({
 require("nvim-autopairs").setup({})
 
 -- Setup nvim-tree (File Explorer)
-require("nvim-tree").setup()
+require("nvim-tree").setup({
+    update_focused_file = {
+        enable = true,
+        update_root = true,
+    },
+    actions = {
+        open_file = {
+            quit_on_open = true, -- Automatically close the tree when opening a file
+        },
+    },
+})
 
 -- File Explorer Keybind
 vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>", { silent = true })
@@ -134,7 +144,7 @@ vim.g.gruvbox_italic = 1              -- Enable italics
 vim.opt.number = true  -- Absolute line numbers
 vim.opt.relativenumber = true  -- Relative line numbers
 
--- Discord Rich Presence 🎮
+-- Discord Rich Presence
 require("presence").setup({
     auto_update = true,      -- Auto-update Discord status
     neovim_image_text = "How do I close Neovim...",  -- Custom hover text
@@ -152,4 +162,3 @@ require("presence").setup({
     -- Buttons
     show_time = true,  -- Show elapsed time
 })
-
