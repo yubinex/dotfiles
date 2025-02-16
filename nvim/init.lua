@@ -1,6 +1,11 @@
 -- Set leader key
 vim.g.mapleader = " "
 
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.softtabstop = 4
+vim.opt.expandtab = true
+
 -- Install Lazy.nvim (Plugin Manager)
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
