@@ -83,6 +83,25 @@ require("nvim-treesitter.configs").setup({
     highlight = { enable = true }
 })
 
+-- Configure conform.nvim for Ruff formatting
+require("conform").setup({
+    formatters_by_ft = {
+        python = { "ruff_format", "ruff_fix" }, -- Run both format and fix
+    },
+    formatters = {
+        ruff_format = {
+            command = "ruff",
+            args = { "format", "--stdin-filename", "$FILENAME", "-" },
+            stdin = true,
+        },
+        ruff_fix = {
+            command = "ruff",
+            args = { "check", "--fix", "--select=I", "--stdin-filename", "$FILENAME", "-" },
+            stdin = true,
+        }
+    }
+})
+
 -- Autoformat on save (Python & Go)
 vim.api.nvim_create_autocmd("BufWritePre", {
     pattern = { "*.py", "*.go" },
