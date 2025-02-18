@@ -43,7 +43,7 @@ local capabilities = require("cmp_nvim_lsp").default_capabilities()
 -- Python LSP
 lspconfig.pyright.setup({ capabilities = capabilities })
 
--- Go LSP
+-- Go LSP with .tmpl support
 lspconfig.gopls.setup({
     capabilities = capabilities,
     settings = {
@@ -51,12 +51,24 @@ lspconfig.gopls.setup({
             experimentalPostfixCompletions = true,
             analyses = { unusedparams = true, shadow = true },
             staticcheck = true,
-            templateExtensions = { "tmpl", "tpl", "html" },
+            templateExtensions = { "tmpl", "tpl", "html" }, -- Ensure gopls supports .tmpl
         },
-    }
+    },
 })
 
--- TypeScript & JavaScript LSP (Fixed tsserver deprecation!)
+-- HTML LSP for .tmpl files
+lspconfig.html.setup({
+    capabilities = capabilities,
+    filetypes = { "html", "gotmpl" }, -- Attach HTML LSP to .tmpl files
+})
+
+-- CSS LSP (useful for Tailwind in .tmpl)
+lspconfig.cssls.setup({
+    capabilities = capabilities,
+    filetypes = { "css", "html", "gotmpl" },
+})
+
+-- TypeScript & JavaScript LSP
 lspconfig.ts_ls.setup({
     cmd = { "typescript-language-server", "--stdio" },
     capabilities = capabilities,
@@ -77,44 +89,41 @@ lspconfig.eslint.setup({
     }
 })
 
--- HTML & CSS LSP
-lspconfig.html.setup({ capabilities = capabilities })
-lspconfig.cssls.setup({ capabilities = capabilities })
-
 -- Treesitter Configuration
 require("nvim-treesitter.configs").setup({
-    ensure_installed = { "python", "go", "lua", "html", "css", "javascript", "typescript", "tsx" },
+    ensure_installed = { "go", "html", "css", "javascript", "typescript" },
     highlight = { enable = true },
-    additional_vim_regex_highlighting = { "gohtmltmpl" },
+    additional_vim_regex_highlighting = { "gotmpl" },
 })
 
 -- Enable Filetype Detection for Go Templates
 vim.filetype.add({
+    extension = {
+        tmpl = "gotmpl",
+    },
     pattern = {
-        [".*%.tmpl"] = "gohtmltmpl",
-        [".*%.tpl"] = "gohtmltmpl",
+        ["%.tmpl"] = "gotmpl",
     },
 })
 
--- Detect Go templates inside .html files
+-- Ensure `.tmpl` uses HTML syntax and correct LSPs
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-    pattern = { "*.html" },
+    pattern = "*.tmpl",
     callback = function()
-        if vim.fn.search("{{", "nw") > 0 then
-            vim.bo.filetype = "gohtmltmpl"
-        end
+        vim.bo.filetype = "gotmpl"
+        vim.cmd("set syntax=html") -- Ensure HTML syntax highlighting
     end,
 })
 
 -- Autoformat on save
 vim.api.nvim_create_autocmd("BufWritePre", {
-    pattern = { "*.py", "*.go", "*.tmpl", "*.tpl", "*.html", "*.js", "*.ts", "*.jsx", "*.tsx" },
+    pattern = { "*.tmpl", "*.tpl" },
     callback = function()
-        vim.cmd("%!prettier --stdin-filepath %")
+        vim.cmd("%!gofmt")
     end,
 })
 
--- Setup nvim-cmp (IntelliSense)
+-- Setup nvim-cmp (Autocomplete)
 local cmp = require("cmp")
 cmp.setup({
     snippet = {
@@ -139,10 +148,13 @@ cmp.setup({
 -- Enable Auto-pairs (Bracket auto-closing)
 local npairs = require("nvim-autopairs")
 npairs.setup({ check_ts = true })
-local Rule = require("nvim-autopairs.rule")
-npairs.add_rule(Rule("{{", "}}"):with_pair(function()
-    return vim.bo.filetype == "gohtmltmpl"
-end))
+
+if npairs then
+    local Rule = require("nvim-autopairs.rule")
+    npairs.add_rule(Rule("{{", "}}"):with_pair(function()
+        return vim.bo.filetype == "gotmpl"
+    end))
+end
 
 -- Setup nvim-tree (File Explorer)
 require("nvim-tree").setup({
