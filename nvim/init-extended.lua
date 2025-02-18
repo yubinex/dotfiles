@@ -115,19 +115,6 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
     end,
 })
 
--- Autoformat on save
-vim.api.nvim_create_autocmd("BufWritePre", {
-    pattern = { "*.tmpl", "*.tpl" },
-    callback = function()
-        -- Check if the file contains Go-specific code
-        local first_line = vim.api.nvim_buf_get_lines(0, 0, 1, false)[1] or ""
-        if string.match(first_line, "{{") then
-            -- Only format if Go templates are detected
-            vim.cmd("%!gofmt")
-        end
-    end,
-})
-
 -- Setup nvim-cmp (Autocomplete)
 local cmp = require("cmp")
 cmp.setup({
@@ -154,12 +141,12 @@ cmp.setup({
 local npairs = require("nvim-autopairs")
 npairs.setup({ check_ts = true })
 
-if npairs then
-    local Rule = require("nvim-autopairs.rule")
-    npairs.add_rule(Rule("{{", "}}"):with_pair(function()
-        return vim.bo.filetype == "gotmpl"
-    end))
-end
+-- Add custom rule for `{{` in Go templates
+local Rule = require("nvim-autopairs.rule")
+npairs.add_rules({
+    Rule("{{", "}", "gotmpl")   -- Auto-close `{{` to `{{}}` in Go templates
+                                -- (default auto close adds one by default so adding only one here works)
+})
 
 -- Setup nvim-tree (File Explorer)
 require("nvim-tree").setup({
