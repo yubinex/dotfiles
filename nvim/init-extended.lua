@@ -119,7 +119,12 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 vim.api.nvim_create_autocmd("BufWritePre", {
     pattern = { "*.tmpl", "*.tpl" },
     callback = function()
-        vim.cmd("%!gofmt")
+        -- Check if the file contains Go-specific code
+        local first_line = vim.api.nvim_buf_get_lines(0, 0, 1, false)[1] or ""
+        if string.match(first_line, "{{") then
+            -- Only format if Go templates are detected
+            vim.cmd("%!gofmt")
+        end
     end,
 })
 
