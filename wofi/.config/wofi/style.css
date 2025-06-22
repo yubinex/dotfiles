@@ -1,0 +1,70 @@
+/*
+ * Wofi - Catppuccin Mocha Theme
+ */
+
+* {
+  font-family: monospace;
+  font-size: 14px;
+}
+
+window {
+  background: linear-gradient(180deg, rgba(30, 30, 46, 0.9) 0%, rgba(69, 71, 90, 0.9) 100%);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+#outer-box {
+  margin: 8px;
+  background: transparent;
+}
+
+#input {
+  margin-bottom: 12px;
+  border-radius: 4px;
+  background: #181825;
+  color: #cdd6f4;
+  padding: 8px;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+#input:focus {
+  border: 1px solid #b4befe;
+  background: #1e1e2e;
+}
+
+#inner-box {
+  background: transparent;
+}
+
+#entry {
+  padding: 6px 10px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+#text {
+  color: #cdd6f4;
+}
+
+#entry:selected {
+  background: #cba6f7;
+  outline: 1px solid #b4befe;
+  padding: 6px 10px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+#entry:selected #text {
+  color: #181825;
+}
+
+#scroll {
+  margin: 4px 0;
+  scrollbar-width: thin;
+  scrollbar-color: #6c7086 #181825;
+}
+
+#img {
+  margin-right: 8px;
+  border-radius: 4px;
+}
