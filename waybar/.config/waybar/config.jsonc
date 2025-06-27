@@ -26,7 +26,7 @@
     "max-length": 50,
   },
   "network": {
-    "interface": "wlan0",
+    "interface": "enp0s31f6",
     "format-wifi": "{essid} ({signalStrength}%) ",
     "format-ethernet": "Connected ",
     "format-disconnected": "Disconnected ⚠",
