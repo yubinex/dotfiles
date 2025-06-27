@@ -4,8 +4,8 @@
     "height": 30,
     "spacing": 4,
     "modules-left": ["hyprland/workspaces", "hyprland/window"],
-    "modules-center": [],
-    "modules-right": ["pulseaudio#microphone", "pulseaudio", "network", "bluetooth", "backlight", "battery", "clock"],
+    "modules-center": ["clock"],
+    "modules-right": ["pulseaudio#microphone", "pulseaudio", "network", "bluetooth", "backlight", "battery", "tray"],
     "hyprland/workspaces": {
         "format": "{icon}",
         "format-icons": {
@@ -18,11 +18,11 @@
         "max-length": 50
     },
     "network": {
+		"interface": "wlan0",
         "format-wifi": "{essid} ({signalStrength}%) ",
         "format-ethernet": "Connected ",
         "format-disconnected": "Disconnected ⚠",
         "tooltip-format": "{ifname}: {ipaddr}/{cidr}",
-	"on-click": "nm-connection-editor"
     },
     "bluetooth": {
         "format": " {status}",
@@ -30,7 +30,7 @@
         "format-connected": " {device_alias}",
         "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
         "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_alias}\t{device_address}",
-    "on-click": "blueman-manager"
+		"on-click": "blueman-applet"
     },
     "backlight": {
         "format": "{percent}% {icon}",
@@ -44,14 +44,14 @@
         "format-icons": {
             "default": ["", "", ""]
         },
-	"on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
-	"on-click-right": "pavucontrol",
-	"scroll-step": 5
+		"on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+		"on-click-right": "pavucontrol",
+		"scroll-step": 5
     },
     "pulseaudio#microphone": {
     	"format": "{format_source}",
-	"format-source": "",
-	"format-source-muted": "Muted ",
+		"format-source": "",
+		"format-source-muted": "Muted ",
     	"on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
     },
     "battery": {
@@ -68,5 +68,9 @@
     "clock": {
         "format": "{:%H:%M %d/%m/%Y}",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
-    }
+    },
+	"tray": {
+		"icon-size": 14,
+		"spacing": 10
+	}
 }
