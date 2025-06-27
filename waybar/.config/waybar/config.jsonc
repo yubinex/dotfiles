@@ -26,11 +26,13 @@
     "max-length": 50,
   },
   "network": {
-    "interface": "enp0s31f6",
+    "interface": ["eno*", "enp*", "eth*", "wired"],
+    "format-ethernet": "Connected (Eth) ",
     "format-wifi": "{essid} ({signalStrength}%) ",
-    "format-ethernet": "Connected ",
     "format-disconnected": "Disconnected ⚠",
     "tooltip-format": "{ifname}: {ipaddr}/{cidr}",
+    "tooltip-format-wifi": "{ifname}: {essid} {ipaddr}/{cidr}",
+    "tooltip-format-ethernet": "{ifname}: {ipaddr}/{cidr}",
   },
   "bluetooth": {
     "format": " {status}",
